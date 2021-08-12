@@ -1,6 +1,6 @@
 <!--skeleton-->
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -25,7 +25,7 @@
         <a class="navbar-brand" href="{% url 'djangoapp:index' %}">Best Cars</a>
         
         <!-- Links -->
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'djangoapp:index' %}">Dealership Reviews</a>
             </li>
@@ -36,6 +36,23 @@
                 <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
             </li>
         </ul>
+
+            {% if user.is_authenticated %}
+            <div>
+                <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
+                <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
+            </div>
+            {% else %}
+            <form class="form-inline my-2 my-lg-0" action="{% url 'djangoapp:login' %}" method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Username" name="username" >
+                    <input type="password" class="form-control" placeholder="Username" name="psw" >
+                    <button class="btn btn-primary" type="submit">Login</button>
+                    <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                </div>
+            </form>
+            {% endif %}
     </nav>
 
     <div class="container-fluid">
@@ -46,13 +63,18 @@
             {% endfor %}
         </div>
         {% endif %}
+        {% if message %}
+            <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+            {{ message }}
+            </div>
+        {% endif %}
         <main role="main" class="row justify-content-center">
 
             <div class="main col-lg-9 col-md-12">{% block content %} {% endblock %}</div>
         </main>
     </div>
 
-    <footer class="footer">
+    <footer class="footer fixed-bottom bg-light">
         <div class="container">
             <ul class="nav justify-content-center">
                 <li class="nav-item">
