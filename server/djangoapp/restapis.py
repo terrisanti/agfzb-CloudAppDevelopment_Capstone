@@ -119,7 +119,48 @@ def get_dealer_by_state_from_cf(url, **kwargs):
 # def get_dealer_by_id_from_cf(url, dealerId):
 # - Call get_request() with specified arguments
 # - Parse JSON results into a DealerView object list
+def get_dealer_reviews_from_cf(url, **kwargs):
+    """
+    This function calls get_request() w/ the specified args (dealerId) then:
+        1. Parses the json data returned from the request / "get-dealer-reviews" Cloud function
+        2. Puts it into a proxy DealerReviews obj.
+        3. Creates and returns a list of those proxies.
+    
+    For some reason, this requires authentication be sent with the request... but is a public api.
+    """
+    results =[]
 
+    # Check for "required" kwargs then make request
+    if 'dealerId' in kwargs:
+        json_result = get_request(url, dealerId=kwargs['dealerId'])
+    else:
+        print('Dealer ID not supplied in kwargs.')
+        results.append("Could not execute request: missing Dealer ID")
+    
+    # Continue with business
+    if 'entries' in json_result:
+        reviews = json_result.get('entries')
+
+        for review in reviews:
+            # take each review and pass the dict/JSON obj to the Dealer Review constructor
+            review_obj = DealerReview(review)
+            # verify new obj - this stuff should be going to the logger...
+            #print(review_obj.review)
+            # Analyze the review sentiment + set it as the property
+            nlu_result = analyze_review_sentiments(review_obj.review)
+            sentiment = ""
+            if 'sentiment' in nlu_result:
+                sentiment = nlu_result['sentiment']['document']['label']
+            elif 'error' in nlu_result:
+                sentiment = 'unknown ' + nlu_result.get('error')
+            review_obj.sentiment = sentiment
+            print("Review ID{} sentiment rating: {}".format(review_obj.id, review_obj.sentiment))
+            results.append(review_obj)
+
+    else:
+        print('No entries received for Dealer Id {}'.format(kwargs.get('dealerId')))
+        results = 'Could not retrieve review data: ' + json.get('error')
+    return results
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
 # def analyze_review_sentiments(text):

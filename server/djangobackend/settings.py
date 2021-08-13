@@ -27,7 +27,7 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["jacap.us-south.cf.appdomain.cloud"]
+ALLOWED_HOSTS = ["jacap.us-south.cf.appdomain.cloud", "localhost"]
 
 
 # Application definition
