@@ -34,16 +34,16 @@ class CarModel(models.Model):
     for r in range((now().year), 1979, -1):
         YEAR_CHOICES.append((r, r))
 
-    SALON = 'salon'
-    COUPE = 'coupe'
+    SEDAN = 'sedan'
+    HATCHBACK = 'hatchback'
     SUV = 'suv'
     TRUCK = 'truck'
     VAN = 'van'
     WAGON = 'wagon'
     SPORTS = 'sports_car'
     TYPE_CHOICES = [
-        (SALON, 'Salon'),
-        (COUPE, 'Coupe'),
+        (SEDAN, 'Sedan'),
+        (HATCHBACK, 'Hatchback'),
         (SUV, 'SUV'),
         (TRUCK, 'Truck'),
         (VAN, 'Van'),
@@ -59,7 +59,7 @@ class CarModel(models.Model):
         null=False,
         max_length=20,
         choices=TYPE_CHOICES,
-        default=SALON
+        default=SEDAN
     )
 
     def __str__(self):
@@ -86,16 +86,18 @@ class CarDealer:
 # <HINT> Create a plain Python class `DealerReview` to hold review data
 class DealerReview:
     """ DealerReview Class"""
-    def __init__(self, id, dealership, review, purchase, purchase_date, car_make, car_model, car_year, sentiment):
-        self.id = id
-        self.dealership = dealership
-        self.review = review
-        self.purchase = purchase
-        self.purchase_date = purchase_date
+    def __init__(self, id, name, dealership, purchase, car_make, car_model, car_year, review, purchase_date, sentiment):
         self.car_make = car_make
         self.car_model = car_model
         self.car_year = car_year
+        self.dealership = dealership
+        self.id = id
+        self.name = name
+        self.purchase = purchase
+        self.purchase_date = purchase_date
+        self.review = review
         self.sentiment = sentiment
-
+    
     def __str__(self):
-        return "Review: " + self.review
+        return "Name: " + self.name + "," + \
+               "Review: " + self.review 

@@ -1,18 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
-
-    <body>
-
-    <!--Add a nav bar here -->
-
-    <!-- Add reviews as cards -->
-
-    </body>
-
-</html>
+{% extends 'djangoapp/layout.html' %}{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading"><h1>Dealership Review</h1></div>
+    <div class="panel-body">
+        <!-- Add reviews as cards -->
+        <div class="container-fluid">
+            <div class="card-columns">
+                {% for review in reviews_list %}
+                <div class="card">
+                    {% ifequal review.sentiment "positive" %}
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/positive.png" width="40px" height="40px" alt="Positive">
+                    {% endifequal %}
+                    {% ifequal review.sentiment "negative" %}
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/negative.png" width="40px" height="40px" alt="Negative">
+                    {% endifequal %}
+                    {% ifequal review.sentiment "neutral" %}
+                        <img class="card-img-left" src="{{MEDIA_URL}}/emoji/neutral.png" width="40px" height="40px" alt="Neutral">
+                    {% endifequal %}
+                        <div class="card-body">
+                            <div class="card-title"> {{ review.car_make }}</div>
+                            <div class="card-title">{{ review.car_model }}</div>
+                            <div class="card-title">{{ review.car_year }}</div>
+                            <div class="card-text">{{ review.review }}</div>
+                        </div>
+                </div>
+                {% endfor %}  
+            </div>
+            {% if user.is_authenticated %}
+                <form action="{% url 'djangoapp:add_review' dealer_id%}" method="get">
+                    <button class="btn btn-primary" type="submit">Click to Add Review</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
