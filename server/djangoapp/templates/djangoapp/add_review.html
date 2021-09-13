@@ -1,6 +1,5 @@
 {% extends 'djangoapp/layout.html' %}{% block content %}
 <div class="panel panel-default">
-    <div class="panel-heading"><h1>Add Review</h1></div>
     <div class="panel-body">
         <form name="reviewForm" action="{% url 'djangoapp:add_review' dealer_id%}" method="POST">
             <div class="container">

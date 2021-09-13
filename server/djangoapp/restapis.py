@@ -67,7 +67,7 @@ def get_dealers_from_cf(url, **kwargs):
             dealer_obj = CarDealer(address=dealer["address"], city=dealer["city"], full_name=dealer["full_name"],
                                    id=dealer["id"], lat=dealer["lat"], long=dealer["long"],
                                    short_name=dealer["short_name"],
-                                   st=dealer["st"], zip=dealer["zip"], state=dealer["state"])
+                                   st=dealer["st"], zip=dealer["zip"])
             results.append(dealer_obj)
     else:
         results = 'Could not pull dealers from database: ' + json_result.get('error', 'no error message provided.')

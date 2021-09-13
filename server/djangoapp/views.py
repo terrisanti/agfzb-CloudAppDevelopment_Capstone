@@ -4,10 +4,6 @@ from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import CarMake, CarModel, CarDealer, DealerReview
 from .restapis import get_request, get_dealers_from_cf, get_dealer_reviews_from_cf, post_request
-# from .models import related models
-# from .models import CarModel
-# from .restapis import related methods
-# from .restapis import get_dealer_by_state_from_cf, get_dealer_reviews_from_cf, get_dealers_from_cf, post_request
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from datetime import datetime
@@ -130,7 +126,7 @@ def add_review(request, dealer_id):
     user = request.user 
     if user.is_authenticated:
         if request.method == "GET":
-            cars = CarModel.objects.filter(dealer_id=dealer_id)
+            cars = CarModel.objects.filter(DealerId=dealer_id)
             print(cars)
             context["cars"] = cars
             context["dealer_id"] = dealer_id
