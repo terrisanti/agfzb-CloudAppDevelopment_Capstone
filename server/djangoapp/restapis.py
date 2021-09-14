@@ -106,6 +106,8 @@ def get_dealer_reviews_from_cf(url, dealer_id):
         reviews_list = json_result["entries"]
         # For each review object
         for review in reviews_list:
+            if dealer_id!=review["dealership"]:
+                continue
             review_obj = DealerReview(id=review["id"], name=review.get("name",""), dealership=review["dealership"], review=review["review"],
                                    purchase=review.get("purchase","NA"), car_make=review.get("car_make","NA"), car_model=review.get("car_model","NA"),
                                    car_year=review.get("car_year","NA"), purchase_date=review.get("purchase_date","NA"), sentiment=" ")
@@ -133,7 +135,13 @@ def analyze_review_sentiments(text):
         features=features, apikey=apikey)
     # - Get the returned sentiment label such as Positive or Negative
 
-    if response:
+    print(response)
+
+    if "error" in response:
+        print('Could not analyze sentiment: ' + response.get('error', 'no error message provided.'))
+        return "neutral"
+
+    elif response:
         senti = response["sentiment"]
         doc = senti["document"]
         return doc["label"]

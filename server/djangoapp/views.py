@@ -127,7 +127,6 @@ def add_review(request, dealer_id):
     if user.is_authenticated:
         if request.method == "GET":
             cars = CarModel.objects.filter(DealerId=dealer_id)
-            print(cars)
             context["cars"] = cars
             context["dealer_id"] = dealer_id
             return render(request, 'djangoapp/add_review.html', context)
@@ -145,8 +144,6 @@ def add_review(request, dealer_id):
             review["name"] = request.user.first_name
             review["purchase"] = "true"
             review["purchase_date"] = request.POST["purchasedate"]
-            #payload = {}
-            #payload["review"] = review
             json_payload = {}
             json_payload["review"] = review
             response = post_request(url, json_payload, dealerId=dealer_id) 
